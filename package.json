@@ -1,0 +1,31 @@
+{
+  "name": "pvp",
+  "version": "0.0.0",
+  "description": "PVP sandbox.",
+  "author": "Brandon Semilla (https://github.com/grandonbroseph)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grandonbroseph/pvp.git"
+  },
+  "scripts": {
+    "postinstall": "npm start",
+    "start": "npm-run-all --parallel serve watch",
+    "serve": "node server.js",
+    "watch": "npm-run-all --parallel watch:*",
+    "watch:html": "pug -Pw docs/pages/index.pug -o docs",
+    "watch:css": "node-sass -r -w docs/styles -o docs",
+    "watch:js": "rollup -w -i docs/scripts/index.js -o docs/index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.6.0"
+  },
+  "devDependencies": {
+    "node-sass": "^3.13.0",
+    "npm-run-all": "^3.1.1",
+    "pug": "^2.0.0-beta6",
+    "rollup": "^0.36.4",
+    "rollup-watch": "^2.5.0"
+  }
+}
