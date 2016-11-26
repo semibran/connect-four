@@ -17,7 +17,7 @@
 .players {
   display: flex;
   justify-content: space-between;
-  color: white;
+  color: silver;
   .player {
     display: flex;
     align-items: center;
@@ -39,6 +39,13 @@
       line-height: 1;
       .hash {
         color: gray;
+      }
+      .name {
+        transition: 0.25s;
+        &:hover {
+          cursor: pointer;
+          color: white;
+        }
       }
     }
   }

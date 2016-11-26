@@ -102,6 +102,11 @@
       }
     },
     methods: {
+      requestUser: function (hash) {
+        if (hash !== "0000" && hash !== "2" && hash.indexOf("CPU") === -1) {
+          socket.emit("user-request", hash)
+        }
+      },
       isMyTurn: function () {
         var hash = this.players[this.turn].hash
         return hash === this.hash || hash === "2"
@@ -425,6 +430,7 @@
                     flag: "danger",
                     onclick: function () {
                       vm.online = false
+                      vm.resetBoard()
                       socket.emit("forfeit")
                     }
                   },
@@ -546,7 +552,8 @@
                 vm.index = 0
               }
             }
-          ]
+          ],
+          onclose: function () {}
         })
       })
       socket.on("rematch-request", function () {
@@ -620,6 +627,47 @@
       })
       socket.on("leave", function (user) {
         vm.users--
+      })
+      socket.on("user-response", function (response) {
+        var template =
+          "<p class='name'>"+
+            "<span class='nickname'>" + response.name + "</span><span class='hash'>#" + response.hash + "</span>"+
+          "</p>"+
+          "<p>Games played: " + response.played + "</p>"+
+          "<p>Wins: " + response.wins + "</p>"+
+          "<p>Losses: " + response.losses + "</p>"
+        var modal = {
+          title: "User Stats",
+          icon: "person",
+          text: template,
+          buttons: response.hash === vm.hash ? [
+            {
+              text: "Change Name",
+              flag: "emphasis",
+              onclick: function () {
+                var value = modal.input.value
+                if (value) {
+                  var players = vm.players
+                  var player, i = players.length
+                  while (i--) {
+                    player = players[i]
+                    if (player.hash === vm.hash) {
+                      player.name = value
+                      break
+                    }
+                  }
+                }
+              }
+            }
+          ] : null,
+          input: {
+            placeholder: "Max 8 chars.",
+            maxlength: 8,
+            value: ""
+          },
+          onclose: function () {}
+        }
+        vm.openModal(modal)
       })
     },
     components: {

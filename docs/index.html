@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <title></title>
+    <title>Connect Four</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Material+Icons"/>
     <link rel="stylesheet" href="index.css"/>
@@ -24,11 +24,14 @@
         </header>
         <article class="section content">
           <div class="text" v-if="modal.text">
-            <p>{{ modal.text }}</p>
+            <p v-html="modal.text"></p>
           </div>
         </article>
-        <footer class="section footer">
-          <section class="buttons">
+        <footer class="section footer" v-if="modal.input || modal.buttons">
+          <section class="input" v-if="modal.input">
+            <input :placeholder="modal.input.placeholder" v-bind:maxlength="modal.input.maxlength" v-model="modal.input.value">
+          </section>
+          <section class="buttons" v-if="modal.buttons">
             <button class="-modal" v-for="button in modal.buttons" key="buttons" v-bind:class="{'-danger': button.flag === 'danger', '-emphasis': button.flag === 'emphasis'}" @click="close() &amp;&amp; button.onclick &amp;&amp; button.onclick()">{{ button.text }}</button>
           </section>
         </footer>
@@ -41,7 +44,7 @@
         <div class="players">
           <div class="player" v-for="(player, index) in players" v-bind:class="{'me': player.hash === hash}">
             <div class="piece" v-bind:class="{'-white': index === 0, '-black': index === 1, '-ghost': turn !== index &amp;&amp; !ended, '-gray': ended &amp;&amp; index !== winner}"></div>
-            <div class="text"><span class="name">{{ player.name }}</span><span class="hash">{{ "#" + player.hash }}</span></div>
+            <div class="text"><span class="name" @click="connected &amp;&amp; requestUser(player.hash)">{{ player.name }}</span><span class="hash">{{ "#" + player.hash }}</span></div>
           </div>
         </div>
         <div class="versus">vs.</div>

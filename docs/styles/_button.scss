@@ -26,8 +26,10 @@ button {
     color: dimgray;
   }
   &.-modal {
-    padding: 12px 24px;
+    margin: 0;
+    padding: 10px 20px;
     background: gray;
+    white-space: nowrap;
     &:not(.-inactive) {
       &:hover {
         cursor: pointer;

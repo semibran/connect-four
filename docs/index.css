@@ -15,10 +15,17 @@ body, button, input {
 button, input {
   border: 0;
   display: flex;
-  background: transparent;
-  padding: 12px 16px; }
+  background: transparent; }
   button:focus, input:focus {
     outline: 0; }
+
+button {
+  padding: 12px 16px; }
+
+input {
+  padding: 8px 12px;
+  font-family: 1rem;
+  border-radius: 0; }
 
 .piece.-white {
   background: url(sprites/piece-white.svg); }
@@ -118,7 +125,7 @@ button, input {
   margin: auto;
   color: white;
   background: black;
-  width: 80vw;
+  width: 90vw;
   max-width: 360px;
   overflow-x: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75); }
@@ -135,7 +142,8 @@ button, input {
       align-items: center;
       padding: 0 12px; }
       .layer.-modal .modal header .title > * {
-        padding: 4px; }
+        padding: 4px;
+        display: flex; }
       .layer.-modal .modal header .title .icon.-rotating i {
         animation: 1.5s rotate linear infinite; }
       .layer.-modal .modal header .title .icon.-rotating.-counter-clockwise i {
@@ -150,23 +158,40 @@ button, input {
     .layer.-modal .modal article .text:empty {
       padding: 0; }
     .layer.-modal .modal article .text p {
-      line-height: 1.4;
+      line-height: 1.5;
       font-size: 0.8rem; }
+      .layer.-modal .modal article .text p.name {
+        font-size: 1rem;
+        font-weight: bold;
+        padding-bottom: 8px; }
+        .layer.-modal .modal article .text p.name .hash {
+          color: dimgray; }
   .layer.-modal .modal footer {
     position: relative;
     background: #333;
     color: gray;
-    height: 64px; }
+    height: 64px;
+    display: flex;
+    padding: 8px; }
     .layer.-modal .modal footer section {
-      position: absolute;
-      top: 0;
-      width: 100%; }
+      display: flex;
+      align-items: center;
+      padding: 8px; }
       .layer.-modal .modal footer section.slide-enter-active, .layer.-modal .modal footer section.slide-leave-active {
         transition: 0.75s; }
       .layer.-modal .modal footer section.slide-enter {
         transform: translateX(100%); }
       .layer.-modal .modal footer section.slide-leave-active {
         transform: translateX(-100%); }
+      .layer.-modal .modal footer section input {
+        width: 100px;
+        color: white;
+        font-size: 0.8rem;
+        border-bottom: 2px solid gray;
+        background: black;
+        transition: 0.25s; }
+        .layer.-modal .modal footer section input:focus {
+          border-bottom-color: white; }
     .layer.-modal .modal footer .warning {
       text-align: center;
       font-style: italic; }
@@ -174,13 +199,10 @@ button, input {
         font-size: 0.8rem;
         line-height: 64px; }
     .layer.-modal .modal footer .buttons {
-      background: #333;
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center; }
-      .layer.-modal .modal footer .buttons button {
-        margin: 0 8px; }
+      flex: 1;
+      justify-content: center; }
+      .layer.-modal .modal footer .buttons button:not(:first-child) {
+        margin-left: 16px; }
 
 .layer.-modal.layer-enter-active, .layer.-modal.layer-enter-active > *, .layer.-modal.layer-leave-active, .layer.-modal.layer-leave-active > * {
   transition: 0.25s; }
@@ -214,8 +236,10 @@ button {
   button.-inactive:not(.-modal) {
     color: dimgray; }
   button.-modal {
-    padding: 12px 24px;
-    background: gray; }
+    margin: 0;
+    padding: 10px 20px;
+    background: gray;
+    white-space: nowrap; }
     button.-modal:not(.-inactive):hover {
       cursor: pointer;
       background: #b3b3b3; }
@@ -278,7 +302,7 @@ button {
 .players {
   display: flex;
   justify-content: space-between;
-  color: white; }
+  color: silver; }
   .players .player {
     display: flex;
     align-items: center; }
@@ -296,6 +320,11 @@ button {
       line-height: 1; }
       .players .player .text .hash {
         color: gray; }
+      .players .player .text .name {
+        transition: 0.25s; }
+        .players .player .text .name:hover {
+          cursor: pointer;
+          color: white; }
 
 .versus {
   position: absolute;

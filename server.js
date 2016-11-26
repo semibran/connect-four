@@ -41,7 +41,10 @@ io.on("connection", (socket) => {
     hash: hash,
     socket: socket,
     match: null,
-    connected: true
+    connected: true,
+    played: 0,
+    wins: 0,
+    losses: 0
   }
   users[hash] = user
   socket.broadcast.emit("join", hash)
@@ -146,6 +149,17 @@ io.on("connection", (socket) => {
     } else {
       console.log("Rematch response lacks a recipient.")
     }
+  })
+  socket.on("user-request", (hash) => {
+    var user = users[hash]
+    var response = !user ? null : {
+      name:   user.name,
+      hash:   user.hash,
+      played: user.played,
+      wins:   user.wins,
+      losses: user.losses,
+    }
+    socket.emit("user-response", response)
   })
   socket.on("disconnect", () => {
     unqueue()

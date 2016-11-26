@@ -4,7 +4,7 @@
     margin: auto;
     color: white;
     background: black;
-    width: 80vw;
+    width: 90vw;
     max-width: 360px;
     overflow-x: hidden;
     @include shadow;
@@ -23,6 +23,7 @@
         padding: 0 12px;
         > * {
           padding: 4px;
+          display: flex;
         }
         .icon.-rotating {
           i {
@@ -48,8 +49,16 @@
           padding: 0;
         }
         p {
-          line-height: 1.4;
+          line-height: 1.5;
           font-size: 0.8rem;
+          &.name {
+            font-size: 1rem;
+            font-weight: bold;
+            padding-bottom: 8px;
+            .hash {
+              color: dimgray;
+            }
+          }
         }
       }
     }
@@ -58,10 +67,12 @@
       background: #333;
       color: gray;
       height: 64px;
+      display: flex;
+      padding: 8px;
       section {
-        position: absolute;
-        top: 0;
-        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 8px;
         &.slide-enter-active, &.slide-leave-active {
           transition: 0.75s;
         }
@@ -70,6 +81,17 @@
         }
         &.slide-leave-active {
           transform: translateX(-100%);
+        }
+        input {
+          width: 100px;
+          color: white;
+          font-size: 0.8rem;
+          border-bottom: 2px solid gray;
+          background: black;
+          transition: 0.25s;
+          &:focus {
+            border-bottom-color: white;
+          }
         }
       }
       .warning {
@@ -81,13 +103,10 @@
         }
       }
       .buttons {
-        background: #333;
-        padding: 12px;
-        display: flex;
+        flex: 1;
         justify-content: center;
-        align-items: center;
-        button {
-          margin: 0 8px;
+        button:not(:first-child) {
+          margin-left: 16px;
         }
       }
     }
