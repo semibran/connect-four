@@ -1,0 +1,115 @@
+.layer.-modal {
+  .modal {
+    position: relative;
+    margin: auto;
+    color: white;
+    background: black;
+    width: 80vw;
+    max-width: 360px;
+    overflow-x: hidden;
+    @include shadow;
+    header {
+      box-sizing: content-box;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: black;
+      border-bottom: 2px solid #333;
+      height: 48px;
+      .title {
+        display: flex;
+        align-items: center;
+        @extend .small-caps;
+        padding: 0 12px;
+        > * {
+          padding: 4px;
+        }
+        .icon.-rotating {
+          i {
+            animation: 1.5s rotate linear infinite;
+          }
+          &.-counter-clockwise i {
+            animation: 1.5s rotate linear reverse infinite;
+          }
+        }
+      }
+    }
+    article {
+      background: black;
+      padding: 12px 16px;
+      .users, .text {
+        padding: 4px 16px;
+      }
+      .text {
+        &:not(:first-child) {
+          padding-bottom: 12px;
+        }
+        &:empty {
+          padding: 0;
+        }
+        p {
+          line-height: 1.4;
+          font-size: 0.8rem;
+        }
+      }
+    }
+    footer {
+      position: relative;
+      background: #333;
+      color: gray;
+      height: 64px;
+      section {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        &.slide-enter-active, &.slide-leave-active {
+          transition: 0.75s;
+        }
+        &.slide-enter {
+          transform: translateX(100%);
+        }
+        &.slide-leave-active {
+          transform: translateX(-100%);
+        }
+      }
+      .warning {
+        text-align: center;
+        font-style: italic;
+        span {
+          font-size: 0.8rem;
+          line-height: 64px;
+        }
+      }
+      .buttons {
+        background: #333;
+        padding: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        button {
+          margin: 0 8px;
+        }
+      }
+    }
+  }
+  &.layer-enter-active, &.layer-leave-active {
+    &, > * {
+      transition: 0.25s;
+    }
+  }
+  &.layer-enter, &.layer-leave-active {
+    .overlay {
+      opacity: 0;
+    }
+    .modal {
+      opacity: 0;
+      transform: scale(1.05);// translateY(8px);
+    }
+  }
+}
+
+@media (min-width: 360px) {
+  .layer.-modal .modal footer .buttons {
+    justify-content: flex-end;
+  }
+}

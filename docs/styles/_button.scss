@@ -1,0 +1,56 @@
+button {
+  @extend .small-caps;
+  position: relative;
+  background: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  transition: 0.25s;
+  span {
+    &:not(:first-child) {
+      padding-left: 8px;
+    }
+    @extend .small-caps;
+  }
+  &:hover {
+    &:not(.-selected):not(.-inactive):not(.-modal) {
+      cursor: pointer;
+      background: #333;
+      color: yellowgreen;
+    }
+  }
+  &.-selected {
+    background: yellowgreen;
+  }
+  &.-inactive:not(.-modal) {
+    color: dimgray;
+  }
+  &.-modal {
+    padding: 12px 24px;
+    background: gray;
+    &:not(.-inactive) {
+      &:hover {
+        cursor: pointer;
+        background: lighten(gray, 20%);
+      }
+      &:active {
+        transform: translateY(1px);
+      }
+      &.-emphasis {
+        background: yellowgreen;
+        &:hover {
+          background: lighten(yellowgreen, 20%);
+        }
+      }
+      &.-danger {
+        background: crimson;
+        &:hover {
+          background: lighten(crimson, 20%);
+        }
+      }
+    }
+    &.-inactive {
+      background: gray;
+    }
+  }
+}

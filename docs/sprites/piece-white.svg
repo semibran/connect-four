@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <circle fill="gold" cx="17" cy="17" r="12"/>
+  <circle fill="darkorange" cx="17" cy="17" r="10"/>
+  <circle fill="gold" cx="17" cy="18" r="9"/>
+</svg>

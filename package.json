@@ -1,7 +1,7 @@
 {
   "name": "pvp",
-  "version": "0.0.0",
-  "description": "PVP sandbox.",
+  "version": "0.1.0",
+  "description": "PVP sandbox for duel-type games.",
   "author": "Brandon Semilla (https://github.com/grandonbroseph)",
   "repository": {
     "type": "git",

@@ -1,0 +1,108 @@
+.piece {
+  &.-white {
+    background: url(sprites/piece-white.svg);
+  }
+  &.-black {
+    background: url(sprites/piece-black.svg);
+  }
+  &.-ghost {
+    opacity: 0.5;
+  }
+  &.-gray {
+    -webkit-filter: grayscale(1);
+    filter: grayscale(1);
+  }
+  &.shrink-leave {
+    transform: scale(1);
+  }
+  &.shrink-leave-active {
+    transition: 0.1s ease-in;
+    transform: scale(0);
+  }
+}
+
+.game {
+  position: relative;
+  width: 100%;
+  &::before {
+    content: "";
+    display: block;
+    padding: 100% 0 0;
+  }
+  .piece {
+    width: 100%;
+    &::before {
+      content: "";
+      display: block;
+      padding: 100% 0 0;
+    }
+    &.-ghost {
+      opacity: 0;
+    }
+  }
+  &:not(.-waiting) .board .column:hover {
+     cursor: pointer;
+     .pieces {
+       &::before {
+         opacity: 1;
+       }
+       .piece.-ghost {
+         position: relative;
+         opacity: 0.5;
+       }
+     }
+     &::after {
+       opacity: 1;
+     }
+  }
+  .board {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    &::before {
+      content: "";
+      display: block;
+      padding: #{100 * 6 / 7}% 0 0;
+    }
+    .columns {
+      @include stretch;
+      position: absolute;
+      display: flex;
+      .column {
+        position: relative;
+        flex: 1;
+        &::before, &::after {
+          @include stretch;
+          position: absolute;
+          content: "";
+          display: block;
+        }
+        &::before {
+          background: url(sprites/square.svg);
+          z-index: 1;
+        }
+        &::after {
+          opacity: 0;
+          z-index: 2;
+          transition: 0.25s;
+          background: rgba(white, 0.25);
+        }
+        .pieces {
+          @include stretch;
+          position: absolute;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+        }
+      }
+    }
+  }
+}
+
+@media (orientation: landscape) {
+  $size: calc(100vh - 96px);
+  .game {
+    width: $size;
+    height: $size;
+  }
+}

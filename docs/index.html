@@ -1,14 +1,103 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <title>Hello World!</title>
-    <meta name="viewport" description="initial-scale=1,width=device-width">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Material+Icons">
-    <link rel="stylesheet" href="index.css">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Material+Icons"/>
+    <link rel="stylesheet" href="index.css"/>
+    <script id="users-template" type="text/x-template">
+      <div class="users">
+        <div class="icon">
+          <transition name="switch" mode="out-in"><i class="material-icons" v-if="users &gt; 1" key="many">people</i><i class="material-icons" v-if="users === 1" key="one">person</i><i class="material-icons" v-if="!users" key="none">warning</i></transition>
+        </div>
+        <div class="text">{{ users }} other {{ users === 1 ? "player" : "players" }} online.</div>
+      </div>
+    </script>
+    <script id="modal-template" type="text/x-template">
+      <div class="modal">
+        <header class="section header">
+          <section class="title">
+            <div class="icon" :class="{'-rotating': !!modal.iconRotation, '-counter-clockwise': modal.iconRotation === -1, '-clockwise': modal.iconRotation === 1}"><i class="material-icons" v-if="modal.icon">{{ modal.icon }}</i></div>
+            <div class="text"><span>{{ modal.title }}</span></div>
+          </section>
+          <button v-if="!modal.priority" @click="close().onclose()"><i class="material-icons">highlight_off</i></button>
+        </header>
+        <article class="section content">
+          <div class="text" v-if="modal.text">
+            <p>{{ modal.text }}</p>
+          </div>
+        </article>
+        <footer class="section footer">
+          <section class="buttons">
+            <button class="-modal" v-for="button in modal.buttons" key="buttons" v-bind:class="{'-danger': button.flag === 'danger', '-emphasis': button.flag === 'emphasis'}" @click="close() &amp;&amp; button.onclick &amp;&amp; button.onclick()">{{ button.text }}</button>
+          </section>
+        </footer>
+      </div>
+    </script>
   </head>
   <body>
     <div id="wrap">
-      <h1 @click="reconnect">Hello World!</h1>
+      <header id="top">
+        <div class="players">
+          <div class="player" v-for="(player, index) in players" v-bind:class="{'me': player.hash === hash}">
+            <div class="piece" v-bind:class="{'-white': index === 0, '-black': index === 1, '-ghost': turn !== index &amp;&amp; !ended, '-gray': ended &amp;&amp; index !== winner}"></div>
+            <div class="text"><span class="name">{{ player.name }}</span><span class="hash">{{ "#" + player.hash }}</span></div>
+          </div>
+        </div>
+        <div class="versus">vs.</div>
+      </header>
+      <div class="whitespace"></div>
+      <div class="game" v-bind:class="{'-waiting': waiting, '-ended': ended}">
+        <div class="board">
+          <transition name="layer">
+            <div class="layer -winner" v-if="ended">
+              <div class="overlay"></div>
+              <div class="content">
+                <div class="text">
+                  <div class="title" v-if="winner === null"><i class="material-icons">star_half</i><span>Tie game!</span></div>
+                  <div class="title" v-else><i class="material-icons" v-if="players[winner].hash !== hash">star_border</i><i class="material-icons" v-if="players[winner].hash === hash">star</i><span>Player {{ winner + 1 }} wins!</span></div>
+                </div>
+                <button class="-modal -emphasis" :class="{'-inactive': !canRequest}" @click="canRequest &amp;&amp; requestRematch()">Rematch</button>
+              </div>
+            </div>
+          </transition>
+          <transition name="layer">
+            <div class="layer -loading" v-if="queueing">
+              <div class="overlay"></div>
+              <div class="content">
+                <div class="loading">
+                  <div class="icon"><i class="material-icons">refresh</i></div>
+                  <div class="text">Waiting for opponent...</div>
+                </div>
+                <button class="-modal -danger" @click="unqueue">Cancel</button>
+              </div>
+              <users :users="users - 1"></users>
+            </div>
+          </transition>
+          <div class="columns">
+            <div class="column" v-for="(column, col) in board" @click="!waiting &amp;&amp; dropPiece(col)">
+              <div class="pieces">
+                <div class="piece -ghost" v-if="!waiting &amp;&amp; column[0] === null" v-bind:class="{'-white': !turn, '-black': turn}"></div>
+                <transition-group name="shrink" v-on:enter="fall">
+                  <div class="piece" v-for="(piece, row) in column" v-if="piece !== null" v-bind:class="{'-white': !piece, '-black': piece, '-gray': ended &amp;&amp; matching.indexOf(col + ',' + row) === -1}" v-bind:key="col + ',' + row"></div>
+                </transition-group>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <transition name="layer">
+        <div class="layer -modal" v-if="modal">
+          <div class="overlay" @click="!modal.priority &amp;&amp; closeModal().onclose()"></div>
+          <modal v-bind:modal="modal" v-bind:close="closeModal" v-bind:users="users - 1"></modal>
+        </div>
+      </transition>
+      <div id="buttons">
+        <div class="group">
+          <button v-bind:class="{'-selected': index === i, '-inactive': button.id === 'online' &amp;&amp; !connected || button.id !== 'online' &amp;&amp; queueing}" v-bind:tooltip="button.text" v-bind:id="'button-' + button.id" @click="index !== i &amp;&amp; setIndex(i)" v-for="(button, i) in buttons"><i class="material-icons">{{ button.icon }}</i></button>
+        </div>
+        <button v-bind:class="{'-inactive': !canReset}" tooltip="Reset" @click="canReset &amp;&amp; reset()"><i class="material-icons">replay</i></button>
+      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.0/vue.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>

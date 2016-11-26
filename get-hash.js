@@ -2,12 +2,13 @@ module.exports = function getHash(length, values, random) {
   length = length || 4
   values = values || "0123456789"
   random = random || Math.random
-  max    = Math.pow(values, length)
-  valuesLength = values.length
+  var valuesLength = values.length
+  var max          = Math.pow(valuesLength, length)
   return function get(list) {
     var attempts = 0
+    var hash = ""
     do {
-      var hash = ""
+      hash = ""
       var i = length
       while (i--) {
         hash += values[(random() * valuesLength) | 0]

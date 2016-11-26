@@ -1,0 +1,41 @@
+*[tooltip] {
+  $background: yellowgreen;
+  &::before, &::after {
+    position: absolute;
+    display: block;
+    left: 50%;
+    opacity: 0;
+    transition: 0.25s;
+    pointer-events: none;
+    color: white;
+    z-index: 4;
+  }
+  &::before {
+    content: attr(tooltip);
+    top: 8px;
+    transform: translate(-50%, calc(-100% - 8px));
+    padding: 8px 16px;
+    background: $background;
+    white-space: nowrap;
+    @extend .small-caps;
+  }
+  &::after {
+    content: "";
+    border: 8px solid transparent;
+    border-top-color: $background;
+    top: 16px;
+    transform: translate(-50%, -100%);
+  }
+  &:not(.-selected):not(.-inactive):hover {
+    &::before, &::after {
+      opacity: 1;
+      transition-delay: 0.25s;
+    }
+    &::before {
+      top: 0;
+    }
+    &::after {
+      top: 8px;
+    }
+  }
+}

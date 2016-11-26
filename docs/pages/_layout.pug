@@ -1,14 +1,22 @@
+mixin head(title)
+  head
+    title= title
+    meta(name="viewport" content="width=device-width,initial-scale=1.0")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Material+Icons")
+    link(rel="stylesheet" href="index.css")
+    block
+
+mixin body
+  body
+    #wrap
+      block
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.0/vue.min.js")
+    script(src="https://cdn.socket.io/socket.io-1.4.5.js")
+    script(src="index.js")
+
 mixin page(title)
   doctype
   html(lang="en-US")
-    head
-      title= title
-      meta(name="viewport" description="initial-scale=1,width=device-width")
-      link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700|Material+Icons")
-      link(rel="stylesheet" href="index.css")
-    body
-      #wrap
-        block
-      script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.0/vue.min.js")
-      script(src="https://cdn.socket.io/socket.io-1.4.5.js")
-      script(src="index.js")
+    +head(title)
+    +body
+      block
